@@ -1,4 +1,5 @@
 class Client < ActiveRecord::Base
+	include PhoneStringsConcern
 	def to_param #overrides
 		slug_was
 	end
@@ -13,18 +14,6 @@ class Client < ActiveRecord::Base
 
 	def default_values
 		self.slug = self.slug.parameterize
-	end
-
-	def area_code
-		phone == nil ? '' : phone.first(3)
-	end
-
-	def phone_prefix
-		phone == nil ? '' : phone.slice(3,3)
-	end
-
-	def phone_suffix
-		phone == nil ? '' : phone.last(4)
 	end
 
 	def self.find_by_first_letter(letter)

@@ -69,7 +69,7 @@ pickle-email-*.html
 .idea
 
 # Sublime test project files
-.sublime-*
+*.sublime-*
 
 # Textmate project files
 /*.tmproj
