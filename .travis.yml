@@ -1,0 +1,20 @@
+language: ruby
+
+rvm:
+  - "2.2.2"
+
+addons:
+  postgresql: "9.3"
+
+before_script:
+  - cp config/database.yml.example config/database.yml
+  - psql -c 'create database mana-api_test;' -U postgres
+
+sudo: false
+
+cache:
+  - bundler
+  - apt
+
+notifications:
+  slack: manacore:vn9ITXRs0av3S9kwXresy57Z
