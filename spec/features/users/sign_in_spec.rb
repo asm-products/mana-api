@@ -9,8 +9,8 @@ feature 'Sign in', :devise do
   #   When I sign in with valid credentials
   #   Then I see an invalid credentials message
   scenario 'user cannot sign in if not registered' do
-    signin('test@example.com', 'please123')
-    expect(page).to have_content I18n.t 'devise.failure.not_found_in_database', authentication_keys: 'email'
+    signin_with_email('test@example.com', 'please123')
+    expect(page).to have_content I18n.t 'devise.failure.not_found_in_database', authentication_keys: 'login'
   end
 
   # Scenario: User can sign in with valid credentials
@@ -18,9 +18,15 @@ feature 'Sign in', :devise do
   #   And I am not signed in
   #   When I sign in with valid credentials
   #   Then I see a success message
-  scenario 'user can sign in with valid credentials' do
+  scenario 'user can sign in with valid email' do
     user = FactoryGirl.create(:user)
-    signin(user.email, user.password)
+    signin_with_email(user.email, user.password)
+    expect(page).to have_content I18n.t 'devise.sessions.signed_in'
+  end
+
+  scenario 'user can sign in with valid username' do
+    user = create(:user)
+    signin_with_username(user.username, user.password)
     expect(page).to have_content I18n.t 'devise.sessions.signed_in'
   end
 
@@ -31,8 +37,14 @@ feature 'Sign in', :devise do
   #   Then I see an invalid email message
   scenario 'user cannot sign in with wrong email' do
     user = FactoryGirl.create(:user)
-    signin('invalid@email.com', user.password)
-    expect(page).to have_content I18n.t 'devise.failure.not_found_in_database', authentication_keys: 'email'
+    signin_with_email('invalid@email.com', user.password)
+    expect(page).to have_content I18n.t 'devise.failure.not_found_in_database', authentication_keys: 'login'
+  end
+
+  scenario 'user cannot sign in with wrong username' do
+    user = FactoryGirl.create(:user)
+    signin_with_username('invaliduser', user.password)
+    expect(page).to have_content I18n.t 'devise.failure.not_found_in_database', authentication_keys: 'login'
   end
 
   # Scenario: User cannot sign in with wrong password
@@ -42,8 +54,8 @@ feature 'Sign in', :devise do
   #   Then I see an invalid password message
   scenario 'user cannot sign in with wrong password' do
     user = FactoryGirl.create(:user)
-    signin(user.email, 'invalidpass')
-    expect(page).to have_content I18n.t 'devise.failure.invalid', authentication_keys: 'email'
+    signin_with_email(user.email, 'invalidpass')
+    expect(page).to have_content I18n.t 'devise.failure.invalid', authentication_keys: 'login'
   end
 
 end
