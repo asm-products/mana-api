@@ -5,6 +5,8 @@ rvm:
 
 addons:
   postgresql: "9.3"
+  code_climate:
+    repo_token: cdf29b5ec38dc4b3228f22ae3905046191259c66e33b3d111bb0c7ae664585b1
 
 before_script:
   - cp config/database.yml.example config/database.yml
