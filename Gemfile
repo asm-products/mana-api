@@ -8,6 +8,7 @@ gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'semver2'
 gem 'phony_rails'
+gem 'active_model_serializers'
 group :development, :test do
   gem 'byebug'
   gem 'web-console', '~> 2.0'
