@@ -2,22 +2,22 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::ClientsController, type: :controller do
 
-	context 'with valid client' do
-		let!(:client){ create(:client) }
+  context 'with valid client' do
+    let!(:client) { create(:client) }
 
     context '#index' do
       before(:each) do
         get :index
       end
-			it 'lists clients' do
-				expect(response).to have_http_status :ok
-				expect(response.body).to include "clients"
-			end
-			it 'excludes attributes' do
+      it 'lists clients' do
+        expect(response).to have_http_status :ok
+        expect(response.body).to include "clients"
+      end
+      it 'excludes attributes' do
         expect(response.body).to_not include "id"
         expect(response.body).to_not include "created_at"
         expect(response.body).to_not include "updated_at"
-			end
+      end
     end
 
     context '#show' do
@@ -29,19 +29,19 @@ RSpec.describe Api::V1::ClientsController, type: :controller do
         expect(JSON.parse(response.body)["client"]["slug"]).to eq client.slug
       end
       it 'excludes attributes' do
-				expect(response.body).to_not include "id"
-				expect(response.body).to_not include "created_at"
-				expect(response.body).to_not include "updated_at"
+        expect(response.body).to_not include "id"
+        expect(response.body).to_not include "created_at"
+        expect(response.body).to_not include "updated_at"
       end
       it 'only accepts slug as id param' do
-        get :show, {id: client.id}
+        get :show, { id: client.id }
         expect(response.body).to eq "null"
       end
     end
 
     context '#create' do
       before(:each) do
-				post :create, { name: "testClient", slug: "abcd" }
+        post :create, { name: "testClient", slug: "abcd" }
       end
       it 'creates clients' do
         expect(response).to have_http_status :ok
@@ -54,7 +54,7 @@ RSpec.describe Api::V1::ClientsController, type: :controller do
 
     context '#update' do
       it 'updates clients' do
-				post :update, id: client.slug, name: "updatedName"
+        post :update, id: client.slug, name: "updatedName"
         expect(response).to have_http_status :ok
         expect(JSON.parse(response.body)["client"]["name"]).to eq "updatedName"
       end
@@ -74,12 +74,12 @@ RSpec.describe Api::V1::ClientsController, type: :controller do
   context 'with invalid client' do
     let!(:client) { create(:client) }
     it '#create returns errors' do
-      post :create, { name:"", slug:"" }
+      post :create, { name: "", slug: "" }
       expect(response).to have_http_status :not_acceptable
       expect(JSON.parse(response.body)["errors"]).to_not eq nil
     end
     it '#update returns errors' do
-			post :update, id: client.slug, name: "", slug: ""
+      post :update, id: client.slug, name: "", slug: ""
       expect(response).to have_http_status :not_acceptable
       expect(JSON.parse(response.body)["errors"]).to_not eq nil
     end
