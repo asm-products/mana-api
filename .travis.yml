@@ -1,0 +1,22 @@
+language: ruby
+
+rvm:
+  - "2.2.2"
+
+addons:
+  postgresql: "9.3"
+  code_climate:
+    repo_token: cdf29b5ec38dc4b3228f22ae3905046191259c66e33b3d111bb0c7ae664585b1
+
+before_script:
+  - cp config/database.yml.example config/database.yml
+  - psql -c 'create database mana_api_test;' -U postgres
+
+sudo: false
+
+cache:
+  - bundler
+  - apt
+
+notifications:
+  slack: manacore:vn9ITXRs0av3S9kwXresy57Z
